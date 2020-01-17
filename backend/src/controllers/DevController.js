@@ -1,47 +1,43 @@
-const axios = require('axios')
-const Dev = require('../models/dev')
-const parseStringAsArray = require('../utils/parseStringAsArray')
-
-//index (mostrar uma lista), show (mostrar somente um), store (criar), update (alterar), destroy (deletar)
+const axios = require("axios");
+const Dev = require("../models/dev");
+const parseStringAsArray = require("../utils/parseStringAsArray");
 
 module.exports = {
-    async index(request, response) {
-        const devs = await Dev.find()
+  async index(req, res) {
+    const devs = await Dev.find();
 
-        return response.json(devs)
-    },
-    
-    async store(request, response)  {
-        const { github_username, techs, latitude, longitude } = request.body
+    return res.json(devs);
+  },
 
-        let dev = await Dev.findOne({ github_username});
+  async store(req, res) {
+    const { github_username, techs, latitude, longitude } = req.body;
 
-        if (!dev) {
+    let dev = await Dev.findOne({ github_username });
 
-            const apiResponse = await axios.get(`https://api.github.com/users/${github_username}`)
-    
-            const {name = login, avatar_url, bio } = apiResponse.data
-        
-            console.log(name, avatar_url, bio, github_username, techs)
-        
-            const techsArray = parseStringAsArray(techs)
-            
-        
-            const location = {
-                type: 'Point',
-                coordinates: [longitude, latitude],
-            }
-        
-            dev = await Dev.create({
-                github_username,
-                name,
-                avatar_url,
-                bio,
-                techs: techsArray,
-                location,
-            })
-        }
+    if (!dev) {
+      const apires = await axios.get(
+        `https://api.github.com/users/${github_username}`
+      );
 
-        return response.json(dev)
+      const { name = login, avatar_url, bio } = apires.data;
+
+      const techsArray = parseStringAsArray(techs);
+
+      const location = {
+        type: "Point",
+        coordinates: [longitude, latitude]
+      };
+
+      dev = await Dev.create({
+        github_username,
+        name,
+        avatar_url,
+        bio,
+        techs: techsArray,
+        location
+      });
     }
-}
+
+    return res.json(dev);
+  }
+};
