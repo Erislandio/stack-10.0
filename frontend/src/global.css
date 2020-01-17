@@ -1,0 +1,23 @@
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+  outline: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background: #e5e6f0;
+  -webkit-font-smoothing: antialiased;
+}
+
+body,
+input,
+button {
+  font-family: "Roboto", sans-serif;
+}
